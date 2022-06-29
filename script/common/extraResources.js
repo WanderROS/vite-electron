@@ -1,4 +1,4 @@
 module.exports = {
-  from: "./resource/release",
+  from: "./resource/unrelease/",
   to: "./",
 };
