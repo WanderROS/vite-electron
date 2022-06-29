@@ -2,8 +2,7 @@
   "name": "vite-electron",
   "version": "0.0.0",
   "scripts": {
-    "dev": "node ./script/dev",
-    "build": "vite"
+    "dev": "node ./script/dev"
   },
   "dependencies": {},
   "devDependencies": {
