@@ -2,13 +2,15 @@
   "name": "vite-electron",
   "version": "0.0.0",
   "scripts": {
-    "dev": "node ./script/dev"
+    "dev": "node ./script/dev",
+    "release": "node ./script/release"
   },
   "dependencies": {},
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
     "@vue/compiler-sfc": "^3.0.4",
     "electron": "^19.0.6",
+    "electron-builder": "^22.9.1",
     "esbuild": "^0.14.47",
     "vite": "^2.9.13",
     "vue": "^3.0.4"
