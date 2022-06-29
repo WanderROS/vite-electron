@@ -18,6 +18,11 @@ let dev = {
                 port: this.serverPort
             },
             plugins: [vue()],
+            resolve:{
+                alias:{
+                    '@':path.resolve(process.cwd(),'src/renderer')
+                }
+            }
         };
         this.server = await vite.createServer(options);
         await this.server.listen();

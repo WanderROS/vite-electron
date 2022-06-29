@@ -40,6 +40,11 @@ let release = {
                 outDir: path.join(process.cwd(), "release/bundled"),
             },
             plugins: [vue()],
+            resolve:{
+                alias:{
+                    '@':path.resolve(process.cwd(),'src/renderer')
+                }
+            }
         };
         await vite.build(options);
     },
