@@ -1,4 +1,4 @@
-import {app, BrowserWindow, protocol, Menu} from "electron";
+import {app, BrowserWindow, protocol, Menu,nativeImage,Tray,dialog} from "electron";
 import path from "path";
 import fs from "fs";
 
@@ -6,6 +6,8 @@ const logger = require('electron-log');
 
 logger.transports.file.level = 'info';
 logger.transports.file.fileName = 'electron-test.log';
+
+let tray;
 
 protocol.registerSchemesAsPrivileged([
     {
@@ -41,6 +43,24 @@ app.on("ready", () => {
     }]
     let menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: '关于',
+            click () {
+                dialog.showMessageBox({
+                    title: 'Vite-Electron',
+                    message: '关于',
+                    detail: `Version: ${process.env.APP_VERSION}\nAuthor: WanderROS\nGithub: https://github.com/WanderROS`
+                })
+            }
+        }
+        ])
+    // 定位图标
+    const icon = nativeImage.createFromPath(path.join(__dirname, 'trayTemplate.png'))
+    tray = new Tray(icon)
+    tray.on('right-click', () => {
+        tray.popUpContextMenu(contextMenu)
+    })
     logger.info('electron test app start at ', new Date());
     protocol.registerBufferProtocol("app", (request, response) => {
         let pathName = new URL(request.url).pathname;
