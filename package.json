@@ -17,6 +17,7 @@
     "esbuild": "^0.14.47",
     "vite": "^2.9.13",
     "vue": "^3.0.4",
-    "vue-router": "^4.0.13"
+    "vue-router": "^4.0.13",
+    "electron-log": "^4.4.8"
   }
 }
