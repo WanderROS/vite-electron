@@ -6,6 +6,12 @@
 
 <script>
 
+  const { ipcRenderer} = require("electron");
+
+  ipcRenderer.on('serialport', (_ev, args) => {
+    let ports =  JSON.parse(args)
+    console.log(ports)
+  })
 
 export default {
   name: 'App',

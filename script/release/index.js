@@ -25,7 +25,7 @@ let release = {
             bundle: true,
             platform: "node",
             sourcemap: false,
-            external: ["electron"],
+            external: ["electron","serialport"],
         });
         let envScript = this.getEnvScript();
         let js = `${envScript}${os.EOL}${fs.readFileSync(outfile)}`;

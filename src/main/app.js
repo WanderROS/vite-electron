@@ -1,6 +1,42 @@
 import { app, BrowserWindow,protocol} from "electron";
 import path from "path";
 import fs from "fs";
+const { SerialPort } = require('serialport')
+
+// https://github.com/serialport/electron-serialport/blob/HEAD/renderer.js
+// This file is required by the index.html file and will
+// be executed in the renderer process for that window.
+// All of the Node.js APIs are available in this process.
+
+async function listSerialPorts() {
+    try {
+        const ports = await SerialPort.list()
+        if (ports.length === 0) {
+            console.log('No ports discovered')
+        }
+        return ports
+    } catch (error) {
+        console.error(error)
+        return []
+    }
+}
+
+// Set a timeout that will check for new serialPorts every 2 seconds.
+// This timeout reschedules itself.
+setTimeout(async function listPorts() {
+    setTimeout(listPorts, 1000)
+    const ports = await listSerialPorts()
+    console.log(JSON.stringify(ports))
+
+    BrowserWindow.getFocusedWindow()?.webContents.send('serialport', JSON.stringify(ports))
+}, 1000)
+
+
+
+
+// Set a timeout that will check for new serialPorts every 2 seconds.
+// This timeout reschedules itself.
+
 
 protocol.registerSchemesAsPrivileged([
     {
@@ -38,6 +74,7 @@ app.on("ready", () => {
             response({ mimeType, data });
         });
     });
+
   let mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -56,4 +93,5 @@ app.on("ready", () => {
        // 开发时 http 访问
         mainWindow.loadURL(`http://localhost:${process.env.WEB_PORT}/`);
     }
+
 });
