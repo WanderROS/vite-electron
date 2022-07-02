@@ -2,10 +2,8 @@ import {app, BrowserWindow, protocol, Menu,nativeImage,Tray,dialog} from "electr
 import path from "path";
 import fs from "fs";
 
-const logger = require('electron-log');
+import logger from "../utils/logger"
 
-logger.transports.file.level = 'info';
-logger.transports.file.fileName = 'electron-test.log';
 
 let tray;
 
@@ -22,27 +20,28 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 app.on("ready", () => {
-    const template = [{
-        label: 'Edit',
-        submenu: [
-            {label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:'},
-            {label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:'},
-            {type: 'separator'},
-            {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
-            {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
-            {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'},
-            {label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:'},
-            {
-                label: 'Quit',
-                accelerator: 'CmdOrCtrl+Q',
-                click() {
-                    app.quit()
-                }
-            }
-        ]
-    }]
-    let menu = Menu.buildFromTemplate(template)
-    Menu.setApplicationMenu(menu)
+    logger.info("Test Log4js ", JSON.stringify(process.env))
+    // const template = [{
+    //     label: 'Edit',
+    //     submenu: [
+    //         {label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:'},
+    //         {label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:'},
+    //         {type: 'separator'},
+    //         {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
+    //         {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
+    //         {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'},
+    //         {label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:'},
+    //         {
+    //             label: 'Quit',
+    //             accelerator: 'CmdOrCtrl+Q',
+    //             click() {
+    //                 app.quit()
+    //             }
+    //         }
+    //     ]
+    // }]
+    // let menu = Menu.buildFromTemplate(template)
+    // Menu.setApplicationMenu(menu)
     const contextMenu = Menu.buildFromTemplate([
         {
             label: '关于',
@@ -61,7 +60,6 @@ app.on("ready", () => {
     tray.on('right-click', () => {
         tray.popUpContextMenu(contextMenu)
     })
-    logger.info('electron test app start at ', new Date());
     protocol.registerBufferProtocol("app", (request, response) => {
         let pathName = new URL(request.url).pathname;
         let extension = path.extname(pathName).toLowerCase();
