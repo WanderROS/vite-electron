@@ -7,7 +7,7 @@
     "clean": "rm -rf release"
   },
   "dependencies": {
-
+    "youtube-dl-exec": "^2.0.12"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
