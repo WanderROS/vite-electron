@@ -1,10 +1,10 @@
-import {app, BrowserWindow, protocol, Menu,nativeImage,Tray,dialog} from "electron";
+import {app, BrowserWindow, protocol, Menu, nativeImage, Tray, dialog, netLog, net} from "electron";
 import path from "path";
 import fs from "fs";
 
 import logger from "../utils/logger"
 
-
+const zlog = require('electron-log');
 let tray;
 
 protocol.registerSchemesAsPrivileged([
@@ -19,8 +19,45 @@ protocol.registerSchemesAsPrivileged([
     },
 ]);
 
+
 app.on("ready", () => {
+    let filepath = path.join(app.getPath("documents"), '/logs/');
+    let nowdate = new Date();
+    let nowdate_str = nowdate.getFullYear() + "_" + (nowdate.getMonth() + 1) + "_" + nowdate.getDate() + "_" + nowdate.getHours();
+    let filename = "mylog_" + nowdate_str + ".log";
+    zlog.transports.file.resolvePath = () => path.join(filepath, filename);
+    zlog.transports.file.level = true;
+    zlog.transports.console.level = true;
+// 日志打印格式
+    zlog.transports.file.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}'
+
+    zlog.info('这是个提示日志');
+    zlog.warn('这是个警告日志');
+    zlog.error('这是个错误日志');
     logger.info("Test Log4js ", JSON.stringify(process.env))
+
+
+    filepath = path.join(app.getPath("documents"), '/logs/');
+    nowdate = new Date();
+    nowdate_str = nowdate.getFullYear() + "_" + (nowdate.getMonth() + 1) + "_" + nowdate.getDate() + "_" + nowdate.getHours();
+    filename = "mynet_" + nowdate_str + ".log";
+    netLog.startLogging(path.join(filepath, filename));
+    let request = net.request("http://www.taobao.com")
+    request.on("response", (response) => {
+        // 获取请求状态码
+        console.log(JSON.stringify(response.statusCode))
+        // 获取请求头
+        console.log(JSON.stringify(response.headers));
+
+        // 监听是否有数据
+        response.on("data", (chunk) => {
+            console.log(chunk.toString())
+        })
+        netLog.stopLogging()
+    })
+    request.end()
+
+
     // const template = [{
     //     label: 'Edit',
     //     submenu: [
@@ -100,5 +137,7 @@ app.on("ready", () => {
     } else {
         // 开发时 http 访问
         mainWindow.loadURL(`http://localhost:${process.env.WEB_PORT}/`);
+        // mainWindow.loadURL("https://www.hao123.com");
     }
+
 });
