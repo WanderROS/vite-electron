@@ -1,7 +1,9 @@
 import {app, BrowserWindow, protocol, Menu, nativeImage, Tray, dialog, netLog, net, desktopCapturer,globalShortcut} from "electron";
 import path from "path";
 import fs from "fs";
+const nodeAbi = require('node-abi')
 
+console.log(nodeAbi.getAbi('19.0.3', 'electron'))
 // import logger from "../utils/logger"
 
 const zlog = require('electron-log');
@@ -28,7 +30,7 @@ protocol.registerSchemesAsPrivileged([
 //         console.log("screen success!")
 //     }
 // });
-var robot = require("robotjs");
+const robot = require("robotjs");
 
 // // Speed up the mouse.
 // robot.setMouseDelay(2);
@@ -54,17 +56,14 @@ var robot = require("robotjs");
 // fs.writeFileSync(path.join(app.getPath("downloads"),"test.bmp"),img.image)
 
 app.on("ready", () => {
-
     const ret = globalShortcut.register('CommandOrControl+X', () => {
         const mouse = robot.getMousePos();
         robot.moveMouseSmooth(mouse.x+100, mouse.y+200);
 
     })
-
     if (!ret) {
         console.log('registration failed')
     }
-
     // 检查快捷键是否注册成功
     console.log(globalShortcut.isRegistered('CommandOrControl+X'))
 
